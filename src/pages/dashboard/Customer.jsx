@@ -16,6 +16,7 @@ import { setCustomers } from "../../store/actions/customerAction";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import EditCustomerModal from "../../component/modal/EditCustomerModal";
+import AddCustomerModal from "../../component/modal/AddCustomerModal";
 
 
 
@@ -60,8 +61,6 @@ const Customer = () => {
   }
 
 
-
-
   useEffect(() => {
     getCustomers()
   }, [])
@@ -78,7 +77,7 @@ const Customer = () => {
           <div className="flex flex-col p-8 gap-8 w-full">
             <div className="flex justify-between">
               <h2 className="text-xl font-bold">CUSTOMER</h2>
-              <Button>Tambah Customer</Button>
+              <AddCustomerModal />
             </div>
             <div>
               <Table aria-label="Customer">

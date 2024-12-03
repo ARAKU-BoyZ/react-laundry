@@ -40,8 +40,12 @@ const EditCustomerModal = () => {
                 Authorization: `Bearer ${token}`
             }
             const response = await axiosInstance.put("/customers", data, {headers})
-            dispatch(updateCustomer(data))
-            console.log(response)
+
+            if (response.status === 200) {
+                dispatch(updateCustomer(data))
+                toast.success("Data berhasil di update!")
+                console.log(response)
+            }
         } catch (error) {
             toast.error("edit gagal")
             console.error(error.message)
