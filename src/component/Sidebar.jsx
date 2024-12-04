@@ -20,7 +20,7 @@ const Sidebar = () => {
       <div className="flex flex-col items-center gap-10">
         <button onClick={() => handleClick("/dashboard-customer") }>Customer</button>
         <button onClick={() => handleClick("/dashboard-product")}>Product</button>
-        <button onClick={() => handleClick("/transaksi")}>Transaksi</button>
+        <button onClick={() => handleClick("/dashboard-transaction")}>Transaksi</button>
       </div>
     </div>
   );

@@ -10,8 +10,40 @@ import {
   import Navigation from "../../component/Navbar";
   import Sidebar from "../../component/Sidebar";
   import Footer from "../../component/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance } from "../../lib/axios";
+import { useEffect } from "react";
+import { setTransactions } from "../../store/actions/transactionAction";
+import DetailTransactionModal from "../../component/modal/DetailTransaction";
   
   const Transaction = () => {
+    const token = useSelector((state) => state.auth.authData) // Akses token
+    const dispatch = useDispatch() // kirim aksi ke redux store
+    const trans = useSelector((state => state.transaction.transactions))
+
+    const getTransactions = async () => {
+      //Authentication
+      try {
+        const headers = {
+          Authorization: `Bearer ${token}`
+        }
+        const response = await axiosInstance.get('/bills', {headers})
+
+        if (response.status === 200) {
+          dispatch(setTransactions(response.data.data))
+          console.log(response)
+        }
+      } catch (error) {
+        console.error(error.message)
+      }
+    }
+
+
+    useEffect(() => {
+      getTransactions()
+    }, [])
+
+
     return (
       <>
         <div>
@@ -23,60 +55,33 @@ import {
             <div className="flex flex-col p-8 gap-8 w-full">
               <div className="flex justify-between">
                 <h2 className="text-xl font-bold">TRANSAKSI</h2>
-                <Button>TRANSAKSI</Button>
+                <Button>TAMBAH TRANSAKSI</Button>
               </div>
               <div>
                 <Table aria-label="Customer">
                   <TableHeader className="flex items-center justify-center">
                     <TableColumn>No</TableColumn>
                     <TableColumn>Nama Customer</TableColumn>
-                    <TableColumn>Nomer Handphone</TableColumn>
-                    <TableColumn>Alamat</TableColumn>
+                    <TableColumn>Nomer Barang</TableColumn>
+                    <TableColumn>Total Harga</TableColumn>
                     <TableColumn className="flex items-center justify-center">
                       Action
                     </TableColumn>
                   </TableHeader>
                   <TableBody>
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell>Jhone</TableCell>
-                      <TableCell>08984474</TableCell>
-                      <TableCell>Serang</TableCell>
-                      <TableCell className="flex justify-center gap-4">
-                        <Button>Edit</Button>
-                        <Button>Hapus</Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell>Jhone</TableCell>
-                      <TableCell>08984474</TableCell>
-                      <TableCell>Serang</TableCell>
-                      <TableCell className="flex justify-center gap-4">
-                        <Button>Edit</Button>
-                        <Button>Hapus</Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell>Jhone</TableCell>
-                      <TableCell>08984474</TableCell>
-                      <TableCell>Serang</TableCell>
-                      <TableCell className="flex justify-center gap-4">
-                        <Button>Edit</Button>
-                        <Button>Hapus</Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell>Jhone</TableCell>
-                      <TableCell>08984474</TableCell>
-                      <TableCell>Serang</TableCell>
-                      <TableCell className="flex justify-center gap-4">
-                        <Button>Edit</Button>
-                        <Button>Hapus</Button>
-                      </TableCell>
-                    </TableRow>
+                    {Object.values(trans).map((trans, index) => {
+                      return (
+                        <TableRow key="1">
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{trans.customer.name}</TableCell>
+                          <TableCell>{trans.billDetails[0].product.name}</TableCell>
+                          <TableCell>{trans.billDetails[0].product.price}</TableCell>
+                          <TableCell className="flex justify-center gap-4">
+                            <DetailTransactionModal />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
                   </TableBody>
                 </Table>
               </div>
