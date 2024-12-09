@@ -7,9 +7,9 @@ import {
     TableHeader,
     TableRow,
   } from "@nextui-org/react";
-  import Navigation from "../../component/Navbar";
-  import Sidebar from "../../component/Sidebar";
-  import Footer from "../../component/Footer";
+import Navigation from "../../component/Navbar";
+import Sidebar from "../../component/Sidebar";
+import Footer from "../../component/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../../lib/axios";
 import { useEffect } from "react";
@@ -60,22 +60,18 @@ import DetailTransactionModal from "../../component/modal/DetailTransaction";
               <div>
                 <Table aria-label="Customer">
                   <TableHeader className="flex items-center justify-center">
-                    <TableColumn>No</TableColumn>
+                    <TableColumn>No id</TableColumn>
                     <TableColumn>Nama Customer</TableColumn>
-                    <TableColumn>Nomer Barang</TableColumn>
-                    <TableColumn>Total Harga</TableColumn>
                     <TableColumn className="flex items-center justify-center">
                       Action
                     </TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {Object.values(trans).map((trans, index) => {
+                    {Object.values(trans).map((trans) => {
                       return (
                         <TableRow key="1">
-                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{trans.customer.id}</TableCell>
                           <TableCell>{trans.customer.name}</TableCell>
-                          <TableCell>{trans.billDetails[0].product.name}</TableCell>
-                          <TableCell>{trans.billDetails[0].product.price}</TableCell>
                           <TableCell className="flex justify-center gap-4">
                             <DetailTransactionModal />
                           </TableCell>

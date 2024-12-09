@@ -42,6 +42,7 @@ const LoginPage = () => {
                 }, 1000)
             }
         } catch (error) {
+            toast.error("Mohon daftar terlebih dahulu!")
             console.log(error)
         }
     }
