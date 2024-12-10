@@ -60,17 +60,17 @@ const DetailTransactionModal = () => {
                                     <TableColumn>Nama Pelanggan</TableColumn>
                                     <TableColumn>Paket Laundry</TableColumn>
                                     <TableColumn>Qty</TableColumn>
-                                    {/* <TableColumn>Total Bayar</TableColumn> */}
+                                    <TableColumn>Harga</TableColumn>
                                 </TableHeader>
                                 <TableBody>
                                     {Object.values(trans).map((trans) => {
                                         return (
-                                            <TableRow key="1">
+                                            <TableRow key={trans.id}>
                                                 <TableCell>{trans.customer.id}</TableCell>
                                                 <TableCell>{trans.customer.name}</TableCell>
                                                 <TableCell>{trans.billDetails[0].product.name}</TableCell>
                                                 <TableCell>{trans.billDetails[0].qty}</TableCell>
-                                                {/* <TableCell>Active</TableCell> */}
+                                                <TableCell>{trans.billDetails[0].price}</TableCell>
                                             </TableRow>
                                         )
                                     })}

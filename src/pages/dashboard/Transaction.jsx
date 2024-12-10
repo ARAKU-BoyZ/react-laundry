@@ -69,7 +69,7 @@ import DetailTransactionModal from "../../component/modal/DetailTransaction";
                   <TableBody>
                     {Object.values(trans).map((trans) => {
                       return (
-                        <TableRow key="1">
+                        <TableRow key={trans.id}>
                           <TableCell>{trans.customer.id}</TableCell>
                           <TableCell>{trans.customer.name}</TableCell>
                           <TableCell className="flex justify-center gap-4">

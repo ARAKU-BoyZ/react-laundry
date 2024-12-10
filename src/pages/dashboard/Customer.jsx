@@ -93,7 +93,7 @@ const Customer = () => {
                 <TableBody>
                   {kons.map((kons, index) => {
                     return (
-                      <TableRow key="id">
+                      <TableRow key={kons.id}>
                         <TableCell key="Nomer">{index + 1}</TableCell>
                         <TableCell key="Name">{kons.name}</TableCell>
                         <TableCell key="Phone Number">{kons.phoneNumber}</TableCell>

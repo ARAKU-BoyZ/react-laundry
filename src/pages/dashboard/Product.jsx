@@ -15,6 +15,8 @@ import { axiosInstance } from "../../lib/axios";
 import { setProducts } from "../../store/actions/productAction";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import AddProductModal from "../../component/modal/AddProductModal";
+import EditProductModal from "../../component/modal/EditProductModal";
 
 const Product = () => {
   const token = useSelector((state) => state.auth.authData) // Validasi token
@@ -73,7 +75,7 @@ const Product = () => {
           <div className="flex flex-col p-8 gap-8 w-full">
             <div className="flex justify-between">
               <h2 className="text-xl font-bold">PRODUCT</h2>
-              <Button>Tambah Product</Button>
+              <AddProductModal />
             </div>
             <div>
               <Table aria-label="Customer">
@@ -89,13 +91,13 @@ const Product = () => {
                 <TableBody>
                   {prod.map((prod, index) => {
                     return (
-                      <TableRow key="1">
+                      <TableRow key={prod.id}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>{prod.price}</TableCell>
                         <TableCell>{prod.type}</TableCell>
                         <TableCell className="flex justify-center gap-4">
-                          <Button>Edit</Button>
+                          <EditProductModal />
                           <Button onClick={() => deleteProduct(prod.id)}>Hapus</Button>
                         </TableCell>
                       </TableRow>

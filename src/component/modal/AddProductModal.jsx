@@ -1,67 +1,64 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { Controller, useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux"
 import { z } from "zod"
 import { axiosInstance } from "../../lib/axios"
 import { toast } from "sonner"
-import { useDispatch, useSelector } from "react-redux"
-import { updateCustomer } from "../../store/actions/customerAction"
+import { addProduct } from "../../store/actions/productAction"
 
 
-const editCustSchema = z.object({
-    name: z.string().min(3, "Nama minimal 3 karakter"),
-    phoneNumber: z.string().regex(/[0-9]/, "Nomer handphoen harus berupa angka"),
-    address: z.string().min(8, "Alamat minimal 8 karakter")
+
+
+const AddProductSchema = z.object ({
+    name: z.string().min(3, "Minimal 3 karakter"),
+    price: z.string().regex(/^[0-9]+(\.[0-9]+)$/, "Masukan hanya berupa number"),
+    type: z.string().max(6, "Max hanya 6 karakter"),
 })
 
-const EditCustomerModal = () => {
-    //Set Data ke redux
-    const dispatch = useDispatch()
-    //Validasi Token
-    const token = useSelector((state) => state.auth.authData)
-    // Fungsi open close modal
-    const {isOpen, onOpen, onOpenChange} = useDisclosure()
 
-    // Validasi Input menggunakan use form
+const AddProductModal = () => {
+    const {isOpen, onOpen, onOpenChange} = useDisclosure()
+    const token = useSelector((state) => state.auth.authData)
+    const dispatch = useDispatch()
+
     const form = useForm({
         defaultValues: {
             name: "",
-            phoneNumber: "",
-            address: "",
+            price: "",
+            type: ""
         },
-        resolver: zodResolver(editCustSchema)
+        resolver: zodResolver(AddProductSchema)
     })
 
-
-    //Fungsi Edit Customer
-    const editCustomer = async (data) => {
+    const addProductModal = async (data) => {
         try {
             const headers = {
                 Authorization: `Bearer ${token}`
             }
-            const response = await axiosInstance.put("/customers", data, {headers})
+            const response = await axiosInstance.post('/products', data, {headers})
 
-            if (response.status === 200) {
-                dispatch(updateCustomer(response.data.data))
-                toast.success("Data berhasil di update!")
+            if (response.status === 201) {
+                toast.success("Product berhasil ditambahkan")
+                dispatch(addProduct(response.data.data))
                 console.log(response)
             }
         } catch (error) {
-            toast.error("edit gagal")
-            console.error(error.message)
+            console.error("error message")
+            toast.error("Mohon maaf untuk saat ini product belum bisa di tambahkan!")
         }
     }
 
     return (
         <>
-            <Button onPress={onOpen}>Edit</Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Button onPress={onOpen}>Tambah Product</Button>
+            <Modal isOpen={isOpen}  onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader>Edit Customer</ModalHeader>
+                            <ModalHeader>Tambah Product</ModalHeader>
                             <ModalBody>
-                                <form onSubmit={form.handleSubmit(editCustomer)} className="flex flex-col gap-4">
+                                <form onSubmit={form.handleSubmit(addProductModal)} className="flex flex-col gap-4">
                                     <Controller
                                      name="name"
                                      control={form.control}
@@ -69,33 +66,33 @@ const EditCustomerModal = () => {
                                         return (
                                             <Input
                                              {...field}
-                                             label="Nama"
+                                             label="Nama Barang"
                                              size="sm"
                                              isInvalid={Boolean(fieldState.error)}
                                              errorMessage={fieldState.error?.message} />
                                         )
                                      }} />
                                     <Controller
-                                     name="phoneNumber"
+                                     name="price"
                                      control={form.control}
                                      render={({field, fieldState}) => {
                                         return (
                                             <Input
                                              {...field}
-                                             label="Nomer Handphone"
+                                             label="Harga Barang"
                                              size="sm"
                                              isInvalid={Boolean(fieldState.error)}
                                              errorMessage={fieldState.error?.message} />
                                         )
                                      }} />
                                     <Controller
-                                     name="address"
+                                     name="type"
                                      control={form.control}
                                      render={({field, fieldState}) => {
                                         return (
                                             <Input
                                              {...field}
-                                             label="Alamat"
+                                             label="Type Barang"
                                              size="sm"
                                              isInvalid={Boolean(fieldState.error)}
                                              errorMessage={fieldState.error?.message} />
@@ -112,5 +109,4 @@ const EditCustomerModal = () => {
         </>
     )
 }
-
-export default EditCustomerModal
+export default AddProductModal
